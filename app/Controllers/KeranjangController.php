@@ -7,8 +7,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class ProdukController extends BaseController
 {
-    public function produk()
+    public function keranjang()
     {
-        return view('v_produk.php');
+        return view('v_keranjang.php');
     }
 }
