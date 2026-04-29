@@ -21,7 +21,8 @@ class AuthController extends BaseController
             $dataUser = [
                 'username' => 'april',
                 'password' => '202cb962ac59075b964b07152d234b70', // 123
-                'role' => 'admin'
+                'role' => 'admin',
+                'email' => 'aprilyani@dsn.dinus.ac.id'
             ];
 
             if ($username == $dataUser['username']) {
@@ -29,6 +30,8 @@ class AuthController extends BaseController
                     session()->set([
                         'username' => $dataUser['username'],
                         'role' => $dataUser['role'],
+                        'email'      => $dataUser['email'],
+                        'login_time' => date('Y-m-d H:i:s'),
                         'isLoggedIn' => TRUE
                     ]);
 
@@ -45,6 +48,11 @@ class AuthController extends BaseController
             return view('v_login');
         }
     }
+
+    public function profile()
+    {
+        return view('v_profile');
+    } 
 
     public function logout()
     {
