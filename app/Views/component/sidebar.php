@@ -31,6 +31,20 @@
                 </a>
             </li><!-- End Dashboard Nav -->
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="<?= base_url('profile') ?>">
+                    <i class="bi bi-question-circle"></i>
+                    <span>FAQ</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="<?= base_url('profile') ?>">
+                    <i class="bi bi-envelope"></i>
+                    <span>Contact</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
         </ul>
 
     </aside><!-- End Sidebar-->
