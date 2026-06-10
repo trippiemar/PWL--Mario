@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
 use App\Models\ProductModel;
+use Dompdf\Dompdf;
 
 class ProdukController extends BaseController
 {
@@ -13,7 +14,8 @@ class ProdukController extends BaseController
 
     function __construct()
     {
-    $this->productModel = new ProductModel();
+        helper('form');
+        $this->productModel = new ProductModel();
     }
 
     public function index()
@@ -22,7 +24,6 @@ class ProdukController extends BaseController
             'products' => $this->productModel->findAll()
         ]);
     }
-
 
     public function create()
     {
@@ -78,10 +79,41 @@ class ProdukController extends BaseController
 
     public function delete($id)
     {
-    $dataProduk = $this->productModel->find($id);
-    $this->productModel->delete($id);
+        $dataProduk = $this->productModel->find($id);
+        $this->productModel->delete($id);
 
-    return redirect('produk')->with('success', 'Data Berhasil Dihapus');
+        return redirect('produk')->with('success', 'Data Berhasil Dihapus');
+    }
+
+    public function download()
+    {
+    // Ambil data produk dari database
+        $products = $this->productModel->findAll();
+
+    // Render view menjadi HTML
+        $html = view('produk/download_pdf', [
+        'products' => $products
+            ]);
+
+    // Nama file PDF
+        $filename = date('Y-m-d-H-i-s') . '-produk.pdf';
+
+    // Inisialisasi Dompdf
+        $dompdf = new Dompdf();
+
+    // Load HTML ke Dompdf
+        $dompdf->loadHtml($html);
+
+    // Setting ukuran kertas dan orientasi
+        $dompdf->setPaper('A4', 'portrait');
+
+    // Generate PDF
+        $dompdf->render();
+
+    // Download / tampilkan PDF
+        $dompdf->stream($filename, [
+        'Attachment' => true
+            ]);
     }
 }
 

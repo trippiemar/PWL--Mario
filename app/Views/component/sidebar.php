@@ -32,14 +32,14 @@
             </li><!-- End Dashboard Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="<?= base_url('profile') ?>">
+                <a class="nav-link collapsed" href="<?= base_url('faq') ?>">
                     <i class="bi bi-question-circle"></i>
                     <span>FAQ</span>
                 </a>
             </li><!-- End Dashboard Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="<?= base_url('profile') ?>">
+                <a class="nav-link collapsed" href="<?= base_url('contact') ?>">
                     <i class="bi bi-envelope"></i>
                     <span>Contact</span>
                 </a>

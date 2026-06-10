@@ -35,7 +35,9 @@ class AuthController extends BaseController
 	            if (password_verify($password, $dataUser['password'])) {
                     session()->set([
                         'username' => $dataUser['username'],
+                        'email'      => $dataUser['email'],
                         'role' => $dataUser['role'],
+                        'login_time' => date('d M Y, H:i:s'),
                         'isLoggedIn' => TRUE
                     ]);
 
