@@ -25,7 +25,14 @@ $routes->group('keranjang', ['filter' => 'auth'], function ($routes) {
     $routes->post('edit', 'TransaksiController::cart_edit'); //Rute ini digunakan untuk mengubah jumlah produk pada keranjang belanja
     $routes->get('delete/(:any)', 'TransaksiController::cart_delete/$1'); //Rute ini digunakan untuk menghapus produk dari keranjang belanja
     $routes->get('clear', 'TransaksiController::cart_clear'); //Rute ini digunakan untuk mengosongkan keranjang belanja
+    $routes->get('checkout', 'TransaksiController::checkout');
 });
+
+$routes->get('checkout', 'TransaksiController::checkout', ['filter' => 'auth']);
+$routes->post('buy', 'TransaksiController::buy', ['filter' => 'auth']);
+
+$routes->get('ajax/destinations','TransaksiController::destinations', ['filter' => 'auth']);
+$routes->get('ajax/costs','TransaksiController::costs', ['filter' => 'auth']);
 
 $routes->get('keranjang', 'TransaksiController::index', ['filter' => 'auth']);//mengakses rute ini harus login dulu
 
