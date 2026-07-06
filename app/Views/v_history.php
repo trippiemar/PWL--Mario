@@ -81,6 +81,10 @@ History Transaksi Pembelian <strong><?= $username ?></strong>
                             <?php endforeach; ?>
                         <?php endif; ?>
                         Ongkir <?= number_to_currency($item['ongkir'], 'IDR') ?>
+                        <br>
+                        Diskon Toko: -<?= number_to_currency($item['diskon'], 'IDR') ?>
+                        <br>
+                        <strong>Total Bayar Akhir: <?= number_to_currency($item['total_harga'], 'IDR') ?></strong>
                     </div>
                 </div>
             </div>

@@ -14,12 +14,12 @@ class TransaksiController extends BaseController
 
     public function __construct()
     {
-        helper(['number', 'form']);
+        helper(['number', 'form', 'diskon']);
         $this->cart                   = service('cart');
         $this->transactionModel       = new TransactionModel();
         $this->transactionDetailModel = new TransactionDetailModel();
     }
-
+     
     public function index()
     {
         $data = [
@@ -176,13 +176,19 @@ class TransaksiController extends BaseController
             $subtotal += $item['qty'] * $item['price'];
         }
 
+        $diskonData    = calculateDiscount($subtotal);
+        $nominalDiskon = $diskonData['nominal'];
+
         $ongkir = (int) $this->request->getPost('ongkir');
+
+        $totalHargaAkhir = ($subtotal - $nominalDiskon) + $ongkir;
 
         $transaction = [
             'username'    => $this->request->getPost('username'),
             'alamat'      => $this->request->getPost('alamat'),
             'ongkir'      => $ongkir,
-            'total_harga' => $subtotal + $ongkir,
+            'total_harga' => $totalHargaAkhir,
+            'diskon'      => $nominalDiskon,
             'status'      => 0,
         ];
 

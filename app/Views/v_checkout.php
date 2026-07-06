@@ -1,57 +1,63 @@
 <?php echo $this->extend('layout') ?>
 <?php echo $this->section('content') ?>
+<?php 
+    helper('diskon'); 
+    $diskonData = calculateDiscount($total); 
+?>
+
 <div class="row">
     <div class="col-lg-6">
         <?php echo form_open('buy', 'class="row g-3"') ?>
 
-<?php echo form_hidden('username', session()->get('username')) ?>
+        <?php echo form_hidden('username', session()->get('username')) ?>
 
-<?php echo form_input([
-    'type' => 'hidden',
-    'name' => 'total_harga',
-    'id'   => 'total_harga']) ?>
+        <?php echo form_input([
+            'type' => 'hidden',
+            'name' => 'total_harga',
+            'id'   => 'total_harga']) ?>
 
-<div class="col-12">
-    <?php echo form_label('Nama', 'nama', ['class' => 'form-label']) ?>
-    <?php echo form_input([
-            'name'     => 'nama',
-            'id'       => 'nama',
-            'class'    => 'form-control',
-            'value'    => session()->get('username'),
-        'readonly' => true]) ?>
-</div>
-<div class="col-12">
-    <?php echo form_label('Alamat', 'alamat', ['class' => 'form-label']) ?>
-    <?php echo form_input([
-            'name'  => 'alamat',
-            'id'    => 'alamat',
-        'class' => 'form-control']) ?>
-</div>
-<div class="col-12">
-    <?php echo form_label('Kelurahan', 'kelurahan', ['class' => 'form-label']) ?>
-    <?php echo form_dropdown('kelurahan', [], '', ['id' => 'kelurahan', 'class' => 'form-control']) ?>
-</div>
-<div class="col-12">
-    <?php echo form_label('Layanan', 'layanan', ['class' => 'form-label']) ?>
-    <?php echo form_dropdown('layanan', [], '', ['id' => 'layanan', 'class' => 'form-control']) ?>
-</div>
-<div class="col-12">
-    <?php echo form_label('Ongkir', 'ongkir', ['class' => 'form-label']) ?>
-    <?php echo form_input([
-            'name'     => 'ongkir',
-            'id'       => 'ongkir',
-            'class'    => 'form-control',
-        'readonly' => true]) ?>
-</div>
-<div class="col-12">
-    <?php echo form_submit(
-            'submit',
-            'Buat Pesanan',
-        ['class' => 'btn btn-primary']) ?>
-</div>
+        <div class="col-12">
+            <?php echo form_label('Nama', 'nama', ['class' => 'form-label']) ?>
+            <?php echo form_input([
+                    'name'     => 'nama',
+                    'id'       => 'nama',
+                    'class'    => 'form-control',
+                    'value'    => session()->get('username'),
+                'readonly' => true]) ?>
+        </div>
+        <div class="col-12">
+            <?php echo form_label('Alamat', 'alamat', ['class' => 'form-label']) ?>
+            <?php echo form_input([
+                    'name'  => 'alamat',
+                    'id'    => 'alamat',
+                'class' => 'form-control']) ?>
+        </div>
+        <div class="col-12">
+            <?php echo form_label('Kelurahan', 'kelurahan', ['class' => 'form-label']) ?>
+            <?php echo form_dropdown('kelurahan', [], '', ['id' => 'kelurahan', 'class' => 'form-control']) ?>
+        </div>
+        <div class="col-12">
+            <?php echo form_label('Layanan', 'layanan', ['class' => 'form-label']) ?>
+            <?php echo form_dropdown('layanan', [], '', ['id' => 'layanan', 'class' => 'form-control']) ?>
+        </div>
+        <div class="col-12">
+            <?php echo form_label('Ongkir', 'ongkir', ['class' => 'form-label']) ?>
+            <?php echo form_input([
+                    'name'     => 'ongkir',
+                    'id'       => 'ongkir',
+                    'class'    => 'form-control',
+                'readonly' => true]) ?>
+        </div>
+        <div class="col-12">
+            <?php echo form_submit(
+                    'submit',
+                    'Buat Pesanan',
+                ['class' => 'btn btn-primary']) ?>
+        </div>
 
-<?php echo form_close() ?>
+        <?php echo form_close() ?>
     </div>
+    
     <div class="col-lg-6">
         <table class="table">
             <thead>
@@ -67,49 +73,59 @@
                     if (! empty($items)):
                         foreach ($items as $index => $item):
                 ?>
-              <tr>
-                  <td><?php echo $item['name'] ?></td>
-                  <td><?php echo number_to_currency($item['price'], 'IDR') ?></td>
-                  <td><?php echo $item['qty'] ?></td>
-                  <td><?php echo number_to_currency($item['price'] * $item['qty'], 'IDR') ?></td>
-              </tr>
-      <?php
-              endforeach;
-          endif;
-      ?>
-      <tr>
-          <td colspan="2"></td>
-          <td>Subtotal</td>
-          <td><?php echo number_to_currency($total, 'IDR') ?></td>
-      </tr>
-      <tr>
-          <td colspan="2"></td>
-          <td>Total</td>
-          <td><span id="total"><?php echo number_to_currency($total, 'IDR') ?></span></td>
-      </tr>
-  </tbody>
-</table>
+                <tr>
+                    <td><?php echo $item['name'] ?></td>
+                    <td><?php echo number_to_currency($item['price'], 'IDR') ?></td>
+                    <td><?php echo $item['qty'] ?></td>
+                    <td><?php echo number_to_currency($item['price'] * $item['qty'], 'IDR') ?></td>
+                </tr>
+                <?php
+                        endforeach;
+                    endif;
+                ?>
+                <tr>
+                    <td colspan="2"></td>
+                    <td>Subtotal</td>
+                    <td><?php echo number_to_currency($total, 'IDR') ?></td>
+                </tr>
+                
+                <tr>
+                    <td colspan="2"></td>
+                    <td>Diskon (<?php echo $diskonData['persen']; ?>%)</td>
+                    <td class="text-danger">- <?php echo number_to_currency($diskonData['nominal'], 'IDR') ?></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
+                    <td>Total</td>
+                    <td><span id="total"><?php echo number_to_currency($total - $diskonData['nominal'], 'IDR') ?></span></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <?php echo $this->endSection() ?>
+
 <?php echo $this->section('script') ?>
 <script>
 $(document).ready(function() {
     let ongkir = 0;
     let subtotal = <?php echo $total ?>;
+    let nominalDiskon = <?php echo $diskonData['nominal'] ?>;
+    let totalBersihSebelumOngkir = subtotal - nominalDiskon;
     hitungTotal();
 
     function hitungTotal() {
-        let total = subtotal + ongkir;
+        let totalAkhir = totalBersihSebelumOngkir + ongkir;
 
         $("#ongkir").val(ongkir);
-        $("#total").text(`IDR ${total.toLocaleString('id-ID')}`);
-        $("#total_harga").val(total);
+        $("#total").text(`IDR ${totalAkhir.toLocaleString('id-ID')}`);
+        $("#total_harga").val(totalAkhir);
     }
 
-	$('#kelurahan').select2({
-	    placeholder: 'Cari daerah tujuan',
-	    minimumInputLength: 3,
+    $('#kelurahan').select2({
+        placeholder: 'Cari daerah tujuan',
+        minimumInputLength: 3,
         ajax: {
             url: '<?php echo site_url('ajax/destinations') ?>',
             dataType: 'json',
@@ -120,11 +136,13 @@ $(document).ready(function() {
                 };
             },
             processResults: function(data) {
-                return data;
+                return {
+                    results: data.results ? data.results : data
+                };
             },
             cache: true
         }
-	});
+    });
 
     $("#kelurahan").on('change', function () {
         let id_kelurahan = $(this).val();
@@ -140,6 +158,7 @@ $(document).ready(function() {
                 destination: id_kelurahan
             },
             success: function (data) {
+                $("#layanan").append('<option value="0">-- Pilih Layanan Kurir --</option>');
                 data.forEach(function (item) {
                     $("#layanan").append(
                         $('<option>', {
@@ -153,7 +172,7 @@ $(document).ready(function() {
     });
 
     $("#layanan").on('change', function() {
-        ongkir = parseInt($(this).val());
+        ongkir = parseInt($(this).val()) || 0;
         hitungTotal();
     });
 });
